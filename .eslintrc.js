@@ -18,6 +18,8 @@ module.exports = {
   parser: '@babel/eslint-parser',
   plugins: ['react'],
   rules: {
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
     'no-unused-vars': 'off',
     'import/extensions': 0,
     'react/prop-types': 0,
