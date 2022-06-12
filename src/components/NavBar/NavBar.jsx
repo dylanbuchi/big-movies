@@ -1,16 +1,16 @@
 import { useState } from 'react';
-
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
 import {
+  Box,
   AppBar,
   IconButton,
   Button,
   Avatar,
   useMediaQuery,
   Drawer,
-} from '@mui/material';
+} from '@mui/material/';
 
 import {
   Menu,
@@ -19,65 +19,75 @@ import {
   Brightness4,
 } from '@mui/icons-material';
 
-import { MenuButton, StyledToolBar, NavDrawer, LinkButton } from './styles';
+import { StyledToolBar } from './styles';
 import SideBar from '../SideBar/SideBar';
 
 const NavBar = () => {
   const theme = useTheme();
 
   const maxWidthStr = '(max-width:600px)';
+  const searchString = 'Search...';
+
   const isMobileDevice = useMediaQuery(maxWidthStr);
   const isAuthenticated = false;
 
   const [MobileOpen, setMobileOpen] = useState(false);
 
   const paperDrawerWidth = 240;
+  const none = 'none';
 
   return (
-    <>
+    <Box>
       <AppBar position="fixed">
         <StyledToolBar>
           {isMobileDevice && (
-            <MenuButton
+            <IconButton
               color="inherit"
               edge="start"
-              style={{ outline: 'none' }}
+              style={{ outline: none }}
+              sx={{ mr: 2, display: { sm: none } }}
               onClick={() => setMobileOpen((open) => !open)}
             >
               <Menu />
-            </MenuButton>
+            </IconButton>
           )}
           <IconButton color="inherit" sx={{ ml: 1 }} onClick={() => {}}>
             {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
-          {!isMobileDevice && 'Search...'}
-          <div>
+          {!isMobileDevice && searchString}
+          <Box>
             {!isAuthenticated ? (
               <Button color="inherit" onClick={() => {}}>
                 Login &nbsp; <AccountCircle />
               </Button>
             ) : (
-              <LinkButton
+              <Button
+                sx={{
+                  '&:hover': {
+                    color: 'white !important',
+                    textDecoration: none,
+                  },
+                }}
                 color="inherit"
-                element={Link}
+                component={Link}
                 to="/profile/:id"
                 onClick={() => {}}
               >
-                {!isMobileDevice && <>My Movies &nbsp; </>}
+                {!isMobileDevice && <>My Movies &nbsp;</>}
                 <Avatar
                   style={{ width: 30, height: 30 }}
                   alt="Profile"
                   src=""
                 />
-              </LinkButton>
+              </Button>
             )}
 
-            {isMobileDevice && 'Search...'}
-          </div>
+            {isMobileDevice && searchString}
+          </Box>
         </StyledToolBar>
       </AppBar>
-      <div>
-        <NavDrawer>
+      <Box>
+        <nav>
           {isMobileDevice ? (
             <Drawer
               variant="temporary"
@@ -102,9 +112,9 @@ const NavBar = () => {
               <SideBar setMobileOpen={setMobileOpen} />
             </Drawer>
           )}
-        </NavDrawer>
-      </div>
-    </>
+        </nav>
+      </Box>
+    </Box>
   );
 };
 
