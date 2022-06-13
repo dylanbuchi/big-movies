@@ -20,7 +20,6 @@ module.exports = {
   rules: {
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
-    'no-unused-vars': 'off',
     'import/extensions': 0,
     'react/prop-types': 0,
     'linebreak-style': 0,
