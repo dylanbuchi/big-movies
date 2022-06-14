@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 export const DivRoot = styled('div')(() => ({
   display: 'flex',
   height: '100%',
+  overflowX: 'hidden',
 }));
 
 export const DivToolbar = styled('div')(() => ({
