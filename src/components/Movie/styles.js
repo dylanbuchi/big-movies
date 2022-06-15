@@ -18,7 +18,8 @@ export const StyledLink = styled(Link)(() => ({
 export const MoviePoster = styled('img')(() => ({
   width: '208px',
   height: '300px',
-  marginBottom: '0',
+
+  marginBottom: '0px',
   borderRadius: '15px',
 
   transition: 'all 0.5s',
@@ -30,11 +31,10 @@ export const MoviePoster = styled('img')(() => ({
 export const typographyStyle = {
   color: 'black',
   textOverflow: 'ellipsis',
+
   alignItems: 'center',
   whiteSpace: 'nowrap',
-  overflow: 'hidden',
 
+  overflow: 'hidden',
   marginTop: '5px',
-  marginBottom: '50px',
-  wordBreakMode: 'break',
 };
