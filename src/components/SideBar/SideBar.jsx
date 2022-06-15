@@ -10,9 +10,12 @@ import {
 import { useTheme } from '@mui/system';
 
 import { LinkImage, Image, StyledLink } from './styles';
+import { useGetMovieGenresQuery } from '../../services/the_movie_database_api';
+import LoadingIcon from '../LoadingIcon/LoadingIcon';
 
 const SideBar = ({ setMobileOpen }) => {
   const theme = useTheme();
+  const { data, isFetching } = useGetMovieGenresQuery();
 
   const darkLogo = '';
   const lightLogo = '';
@@ -21,12 +24,6 @@ const SideBar = ({ setMobileOpen }) => {
     { label: 'Popular', value: 'popular' },
     { label: 'Just Added', value: 'just_added' },
     { label: 'Coming Soon', value: 'coming_soon' },
-  ];
-
-  const movieGenres = [
-    { label: 'Action', value: 'action' },
-    { label: 'Comedy', value: 'comedy' },
-    { label: 'Drama', value: 'drama' },
   ];
 
   return (
@@ -49,16 +46,20 @@ const SideBar = ({ setMobileOpen }) => {
       </List>
       <Divider />
       <List>
-        {movieGenres.map(({ label, value }) => (
-          <StyledLink key={value} to="/">
-            <ListItem onClick={() => {}} button>
-              <ListItemIcon>
-                <img src="" />
-              </ListItemIcon>
-              <ListItemText primary={label} />
-            </ListItem>
-          </StyledLink>
-        ))}
+        {isFetching ? (
+          <LoadingIcon />
+        ) : (
+          data.genres.map(({ name, id }) => (
+            <StyledLink key={name} to="/">
+              <ListItem onClick={() => {}} button>
+                <ListItemIcon>
+                  <img src="" />
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            </StyledLink>
+          ))
+        )}
       </List>
     </>
   );
