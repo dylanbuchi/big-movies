@@ -1,17 +1,15 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { useGetPopularMoviesQuery } from '../../services/the_movie_database_api';
+
+import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import MovieList from '../MovieList/MovieList';
 
 const Movies = () => {
   const { data, isError, isFetching } = useGetPopularMoviesQuery();
 
   if (isFetching) {
-    return (
-      <Box display="flex" justifyContent="center">
-        <CircularProgress size="4rem" />
-      </Box>
-    );
+    return <LoadingIcon />;
   }
 
   if (!data.results.length) {
