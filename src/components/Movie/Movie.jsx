@@ -1,4 +1,4 @@
-import { Typography, Grid, Grow } from '@mui/material';
+import { Typography, Grid, Grow, Rating, Box, Tooltip } from '@mui/material';
 import { StyledLink, MoviePoster, typographyStyle } from './styles';
 
 export const Movie = ({ movie, index }) => {
@@ -37,6 +37,29 @@ export const Movie = ({ movie, index }) => {
           <Typography variant="h6" sx={typographyStyle}>
             {checkMovieTitleLength(movie.title, 22)}
           </Typography>
+          <Tooltip
+            disableTouchListener
+            title={`${movie.vote_average} / 10`}
+            PopperProps={{
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [-10, -90],
+                  },
+                },
+              ],
+            }}
+          >
+            <Box>
+              <Rating
+                readOnly
+                value={movie.vote_average / 1.75}
+                precision={0.1}
+                sx={{ mb: '50px' }}
+              />
+            </Box>
+          </Tooltip>
         </StyledLink>
       </Grow>
     </Grid>
