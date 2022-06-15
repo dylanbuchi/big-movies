@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material/styles';
 
 export const DivRoot = styled('div')(() => ({
   display: 'flex',
@@ -10,7 +10,14 @@ export const DivToolbar = styled('div')(() => ({
   height: '70px',
 }));
 
-export const MainContent = styled('main')(() => ({
+export const MainContent = styled('main')(({ theme }) => ({
   flexGrow: '1',
-  padding: '2em',
+  paddingTop: '2.5em',
+
+  [theme.breakpoints.up('lg')]: {
+    paddingLeft: '22em',
+  },
+
+  [theme.breakpoints.only('sm')]: { paddingLeft: '14.5em' },
+  [theme.breakpoints.only('md')]: { paddingLeft: '17em' },
 }));
