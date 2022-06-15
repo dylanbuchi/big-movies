@@ -14,7 +14,13 @@ export const theMovieDatabaseApi = createApi({
       query: () =>
         `movie/popular?api_key=${theMovieDatabaseApiKey}&page=${page}`,
     }),
+
+    getMovieGenres: builder.query({
+      query: () =>
+        `genre/movie/list?api_key=${theMovieDatabaseApiKey}&page=${page}`,
+    }),
   }),
 });
 
-export const { useGetPopularMoviesQuery } = theMovieDatabaseApi;
+export const { useGetPopularMoviesQuery, useGetMovieGenresQuery } =
+  theMovieDatabaseApi;
