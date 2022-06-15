@@ -5,7 +5,7 @@ import { Movie } from '../Movie/Movie';
 const MovieList = ({ movies }) => (
   <Grid container spacing={0}>
     {movies.results.map((movie, i) => (
-      <Movie index={i} movie={movie} />
+      <Movie key={i} index={i} movie={movie} />
     ))}
   </Grid>
 );
