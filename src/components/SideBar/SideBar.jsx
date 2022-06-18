@@ -8,10 +8,11 @@ import {
 } from '@mui/material';
 
 import { useTheme } from '@mui/system';
-
 import { LinkImage, Image, StyledLink } from './styles';
 import { useGetMovieGenresQuery } from '../../services/the_movie_database_api';
+
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
+import movieGenreIcons from '../../assets/images/movie_genres';
 
 const SideBar = ({ setMobileOpen }) => {
   const theme = useTheme();
@@ -36,9 +37,6 @@ const SideBar = ({ setMobileOpen }) => {
         {movieCategories.map(({ label, value }) => (
           <StyledLink key={value} to="/">
             <ListItem onClick={() => {}} button>
-              <ListItemIcon>
-                <img src="" />
-              </ListItemIcon>
               <ListItemText primary={label} />
             </ListItem>
           </StyledLink>
@@ -46,6 +44,7 @@ const SideBar = ({ setMobileOpen }) => {
       </List>
       <Divider />
       <List>
+        <ListSubheader>Genres</ListSubheader>
         {isFetching ? (
           <LoadingIcon />
         ) : (
@@ -53,7 +52,11 @@ const SideBar = ({ setMobileOpen }) => {
             <StyledLink key={name} to="/">
               <ListItem onClick={() => {}} button>
                 <ListItemIcon>
-                  <img src="" />
+                  <img
+                    src={movieGenreIcons[name.toLowerCase()]}
+                    height="35px"
+                    width="35px"
+                  />
                 </ListItemIcon>
                 <ListItemText primary={name} />
               </ListItem>
