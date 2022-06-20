@@ -3,24 +3,45 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const theMovieDatabaseApiKey = process.env.REACT_APP_THE_MOVIE_DATABASE_API_KEY;
 
 const theMovieDatabaseApiBaseUrl = 'https://api.themoviedb.org/3/';
-const page = 1;
+const apiKeyUrl = `api_key=${theMovieDatabaseApiKey}`;
 
 export const theMovieDatabaseApi = createApi({
   reducerPath: 'theMovieDatabaseApi',
 
   baseQuery: fetchBaseQuery({ baseUrl: theMovieDatabaseApiBaseUrl }),
   endpoints: (builder) => ({
-    getPopularMovies: builder.query({
-      query: () =>
-        `movie/popular?api_key=${theMovieDatabaseApiKey}&page=${page}`,
+    getMovies: builder.query({
+      query: ({ movieCategoryOrGenreId, page }) => {
+        // get movies by category
+        if (
+          movieCategoryOrGenreId &&
+          typeof movieCategoryOrGenreId === 'string'
+        ) {
+          // get trending movies
+          if (movieCategoryOrGenreId === 'trending') {
+            return `${movieCategoryOrGenreId}/movie/day?${apiKeyUrl}`;
+          }
+
+          return `movie/${movieCategoryOrGenreId}?${apiKeyUrl}&page=${page}`;
+        }
+        // get movies by genre
+        if (
+          movieCategoryOrGenreId &&
+          typeof movieCategoryOrGenreId === 'number'
+        ) {
+          return `discover/movie?with_genres=${movieCategoryOrGenreId}&api_key=${theMovieDatabaseApiKey}&page=${page}`;
+        }
+        // get popular movies by default
+        return `movie/popular?${apiKeyUrl}&page=${page}`;
+      },
     }),
 
     getMovieGenres: builder.query({
-      query: () =>
-        `genre/movie/list?api_key=${theMovieDatabaseApiKey}&page=${page}`,
+      // get movie genre titles
+      query: () => `genre/movie/list?${apiKeyUrl}`,
     }),
   }),
 });
 
-export const { useGetPopularMoviesQuery, useGetMovieGenresQuery } =
+export const { useGetMoviesQuery, useGetMovieGenresQuery } =
   theMovieDatabaseApi;
