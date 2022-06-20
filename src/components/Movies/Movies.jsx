@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useGetMoviesQuery } from '../../services/the_movie_database_api';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
-import MovieList from '../MovieList/MovieList';
+import { MovieList } from '..';
 
 const Movies = () => {
   const [page, setPage] = useState(1);

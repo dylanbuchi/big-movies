@@ -20,7 +20,8 @@ import {
 } from '@mui/icons-material';
 
 import { StyledToolBar } from './styles';
-import SideBar from '../SideBar/SideBar';
+
+import { SideBar } from '..';
 
 const NavBar = () => {
   const theme = useTheme();
@@ -55,6 +56,7 @@ const NavBar = () => {
             {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
           {!isMobileDevice && searchString}
+          {isMobileDevice && searchString}
           <Box>
             {!isAuthenticated ? (
               <Button color="inherit" onClick={() => {}}>
@@ -81,8 +83,6 @@ const NavBar = () => {
                 />
               </Button>
             )}
-
-            {isMobileDevice && searchString}
           </Box>
         </StyledToolBar>
       </AppBar>

@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 
-import { Movie } from '../Movie/Movie';
+import { Movie } from '..';
 
 const MovieList = ({ movies }) => (
   <Grid

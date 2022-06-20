@@ -12,8 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LinkImage, Image, StyledLink } from './styles';
 import { useGetMovieGenresQuery } from '../../services/the_movie_database_api';
 
-import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import movieGenreIcons from '../../assets/images/movie_genres';
+
+import { LoadingIcon } from '..';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
 
 const SideBar = ({ setMobileOpen }) => {
