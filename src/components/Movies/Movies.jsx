@@ -1,12 +1,27 @@
 import { Box, Typography } from '@mui/material';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { useGetPopularMoviesQuery } from '../../services/the_movie_database_api';
+import { useGetMoviesQuery } from '../../services/the_movie_database_api';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import MovieList from '../MovieList/MovieList';
 
 const Movies = () => {
-  const { data, isError, isFetching } = useGetPopularMoviesQuery();
+  const [page, setPage] = useState(1);
+
+  const { movieCategoryOrGenreId } = useSelector(
+    (state) => state.movieCategoryOrGenre,
+  );
+
+  const { data, isError, isFetching } = useGetMoviesQuery({
+    movieCategoryOrGenreId,
+    page,
+  });
+
+  if (isError) {
+    return <Box>Error!</Box>;
+  }
 
   if (isFetching) {
     return <LoadingIcon />;
@@ -18,10 +33,6 @@ const Movies = () => {
         <Typography variant="h4">No movies found</Typography>
       </Box>
     );
-  }
-
-  if (isError) {
-    return <Box>Error!</Box>;
   }
 
   return (
