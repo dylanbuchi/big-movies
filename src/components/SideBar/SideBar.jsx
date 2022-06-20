@@ -13,6 +13,7 @@ import { LinkImage, Image, StyledLink } from './styles';
 import { useGetMovieGenresQuery } from '../../services/the_movie_database_api';
 
 import movieGenreIcons from '../../assets/images/movie_genres';
+import { searchMovie } from '../../features/search_movie';
 
 import { LoadingIcon } from '..';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
@@ -26,6 +27,7 @@ const SideBar = ({ setMobileOpen }) => {
     dispatch(selectMovieCategoryOrGenre(value));
   };
 
+  const removeSearchMovieState = () => dispatch(searchMovie(''));
   const { data, isFetching } = useGetMovieGenresQuery();
 
   const darkLogo = '';
@@ -47,7 +49,13 @@ const SideBar = ({ setMobileOpen }) => {
         <ListSubheader>Categories</ListSubheader>
         {movieCategories.map(({ label, value }) => (
           <StyledLink key={value} to="/">
-            <ListItem onClick={() => selectMovie(value)} button>
+            <ListItem
+              onClick={() => {
+                selectMovie(value);
+                removeSearchMovieState();
+              }}
+              button
+            >
               <ListItemText primary={label} />
             </ListItem>
           </StyledLink>
@@ -61,7 +69,13 @@ const SideBar = ({ setMobileOpen }) => {
         ) : (
           data.genres.map(({ name, id }) => (
             <StyledLink key={name} to="/">
-              <ListItem onClick={() => selectMovie(id)} button>
+              <ListItem
+                onClick={() => {
+                  selectMovie(id);
+                  removeSearchMovieState();
+                }}
+                button
+              >
                 <ListItemIcon>
                   <img
                     src={movieGenreIcons[name.toLowerCase()]}
