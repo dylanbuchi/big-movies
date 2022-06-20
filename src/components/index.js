@@ -7,3 +7,4 @@ export { default as SideBar } from './SideBar/SideBar';
 export { default as MovieList } from './MovieList/MovieList';
 export { default as Movie } from './Movie/Movie';
 export { default as LoadingIcon } from './LoadingIcon/LoadingIcon';
+export { default as Search } from './Search/Search';
