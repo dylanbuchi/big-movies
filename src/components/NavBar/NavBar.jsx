@@ -21,13 +21,13 @@ import {
 
 import { StyledToolBar } from './styles';
 
-import { SideBar } from '..';
+import { SideBar, Search } from '..';
 
 const NavBar = () => {
   const theme = useTheme();
 
   const maxWidthStr = '(max-width:600px)';
-  const searchString = 'Search...';
+  // const searchString = 'Search...';
 
   const isMobileDevice = useMediaQuery(maxWidthStr);
   const isAuthenticated = false;
@@ -55,8 +55,8 @@ const NavBar = () => {
           <IconButton color="inherit" sx={{ ml: 1 }} onClick={() => {}}>
             {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
-          {!isMobileDevice && searchString}
-          {isMobileDevice && searchString}
+          {!isMobileDevice && <Search />}
+
           <Box>
             {!isAuthenticated ? (
               <Button color="inherit" onClick={() => {}}>
@@ -84,6 +84,7 @@ const NavBar = () => {
               </Button>
             )}
           </Box>
+          {isMobileDevice && <Search />}
         </StyledToolBar>
       </AppBar>
       <Box>
