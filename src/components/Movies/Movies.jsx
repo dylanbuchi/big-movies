@@ -14,9 +14,12 @@ const Movies = () => {
     (state) => state.movieCategoryOrGenre,
   );
 
+  const { searchMovie } = useSelector((state) => state.searchMovie);
+
   const { data, isError, isFetching } = useGetMoviesQuery({
     movieCategoryOrGenreId,
     page,
+    searchMovie,
   });
 
   if (isError) {
