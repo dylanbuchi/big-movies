@@ -8,14 +8,23 @@ import {
 } from '@mui/material';
 
 import { useTheme } from '@mui/system';
+import { useDispatch, useSelector } from 'react-redux';
 import { LinkImage, Image, StyledLink } from './styles';
 import { useGetMovieGenresQuery } from '../../services/the_movie_database_api';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import movieGenreIcons from '../../assets/images/movie_genres';
+import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
 
 const SideBar = ({ setMobileOpen }) => {
   const theme = useTheme();
+
+  const dispatch = useDispatch();
+
+  const selectMovie = (value) => {
+    dispatch(selectMovieCategoryOrGenre(value));
+  };
+
   const { data, isFetching } = useGetMovieGenresQuery();
 
   const darkLogo = '';
@@ -23,8 +32,9 @@ const SideBar = ({ setMobileOpen }) => {
 
   const movieCategories = [
     { label: 'Popular', value: 'popular' },
-    { label: 'Just Added', value: 'just_added' },
-    { label: 'Coming Soon', value: 'coming_soon' },
+    { label: 'Top Rated', value: 'top_rated' },
+    { label: 'Trending Now', value: 'trending' },
+    { label: 'Coming Soon', value: 'upcoming' },
   ];
 
   return (
@@ -36,7 +46,7 @@ const SideBar = ({ setMobileOpen }) => {
         <ListSubheader>Categories</ListSubheader>
         {movieCategories.map(({ label, value }) => (
           <StyledLink key={value} to="/">
-            <ListItem onClick={() => {}} button>
+            <ListItem onClick={() => selectMovie(value)} button>
               <ListItemText primary={label} />
             </ListItem>
           </StyledLink>
@@ -50,7 +60,7 @@ const SideBar = ({ setMobileOpen }) => {
         ) : (
           data.genres.map(({ name, id }) => (
             <StyledLink key={name} to="/">
-              <ListItem onClick={() => {}} button>
+              <ListItem onClick={() => selectMovie(id)} button>
                 <ListItemIcon>
                   <img
                     src={movieGenreIcons[name.toLowerCase()]}
