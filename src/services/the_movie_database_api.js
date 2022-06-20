@@ -11,7 +11,11 @@ export const theMovieDatabaseApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: theMovieDatabaseApiBaseUrl }),
   endpoints: (builder) => ({
     getMovies: builder.query({
-      query: ({ movieCategoryOrGenreId, page }) => {
+      query: ({ movieCategoryOrGenreId, page, searchMovie }) => {
+        // get movies by search
+        if (searchMovie) {
+          return `search/movie?query=${searchMovie}&${apiKeyUrl}&page=${page}`;
+        }
         // get movies by category
         if (
           movieCategoryOrGenreId &&
@@ -32,6 +36,7 @@ export const theMovieDatabaseApi = createApi({
           return `discover/movie?with_genres=${movieCategoryOrGenreId}&api_key=${theMovieDatabaseApiKey}&page=${page}`;
         }
         // get popular movies by default
+
         return `movie/popular?${apiKeyUrl}&page=${page}`;
       },
     }),
