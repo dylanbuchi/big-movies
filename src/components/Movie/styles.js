@@ -15,16 +15,18 @@ export const StyledLink = styled(Link)(() => ({
   },
 }));
 
-export const MoviePoster = styled('img')(() => ({
+export const MoviePoster = styled('img')(({ theme }) => ({
   width: '208px',
   height: '300px',
 
   marginBottom: '0px',
   borderRadius: '15px',
 
-  transition: 'all 0.5s',
-  '&:hover': {
-    transform: 'scale(1.08)',
+  [theme.breakpoints.up('md')]: {
+    transition: 'all 0.25s',
+    '&:hover': {
+      transform: 'scale(1.08)',
+    },
   },
 }));
 
