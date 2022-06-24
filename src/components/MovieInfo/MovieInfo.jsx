@@ -10,11 +10,13 @@ import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
 
 const MovieInfo = () => {
-  const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
-
+  const dispatch = useDispatch();
   const { id: movieId } = useParams();
+
   const { data, isFetching, isError } = useGetMovieInfoQuery(movieId);
 
+  const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
+  console.log(data);
   if (isError) {
     return <Box>Error</Box>;
   }
@@ -23,14 +25,14 @@ const MovieInfo = () => {
     return <LoadingIcon />;
   }
 
-  const dispatch = useDispatch();
-
   const movieInfo = {
     title: data?.title,
     poster: data?.poster_path,
     releaseYear: data?.release_date.split('-')[0],
 
     tagLine: data?.tagline,
+    overview: data?.overview,
+
     description: data?.overview,
     rating: parseFloat((data.vote_average / 1.75).toFixed(1)),
 
@@ -38,18 +40,29 @@ const MovieInfo = () => {
     languages: data?.spoken_languages.map((item) => item.name),
 
     genres: data?.genres,
+    castList: data?.credits?.cast.filter((cast) => cast?.profile_path),
+    topCast: data?.credits?.cast
+      .filter((cast) => cast?.profile_path)
+      .slice(0, 6),
   };
 
   return (
     <StyledGrid container>
-      <Grid item sm={12} lg={4} sx={{ display: 'flex', marginBottom: '30px' }}>
+      <Grid
+        item
+        sm={12}
+        lg={4}
+        sx={{
+          display: 'flex',
+          marginBottom: '30px',
+        }}
+      >
         <MoviePoster
           src={`${movieImageUrl}${movieInfo.poster}`}
           alt={movieInfo.title}
         />
       </Grid>
-
-      <Grid item container direction="column" lg={7}>
+      <Grid item container direction="column" lg={7} paddingRight="10px">
         <Typography gutterBottom variant="h3" align="center">
           {movieInfo.title} ({movieInfo.releaseYear})
         </Typography>
@@ -75,7 +88,6 @@ const MovieInfo = () => {
             {movieInfo.runtime} min
           </Typography>
         </StyledGrid>
-
         <Grid
           item
           sx={{
@@ -110,6 +122,54 @@ const MovieInfo = () => {
                 {genre.name}
               </Typography>
             </Link>
+          ))}
+        </Grid>
+        <Typography variant="h5" gutterBottom marginTop="10px">
+          Overview
+        </Typography>
+        <Typography
+          sx={{ textAlign: 'center', padding: '10px' }}
+          variant="h5"
+          gutterBottom
+          marginBottom="2rem"
+        >
+          {movieInfo.overview}
+        </Typography>
+        <Typography variant="h5" gutterBottom>
+          Top Cast
+        </Typography>
+        <Grid item container spacing={2}>
+          {movieInfo.topCast.map((cast) => (
+            <Grid
+              key={`${cast.name.toLocaleLowerCase()}-${cast.character.toLocaleLowerCase()}`}
+              item
+              xs={4}
+              md={2}
+              component={Link}
+              sx={{ textDecoration: 'none', color: 'black' }}
+              to="/actors/"
+            >
+              <img
+                src={`${movieImageUrl}${cast.profile_path}`}
+                alt={cast.name}
+                style={{
+                  width: '100%',
+                  maxWidth: '7em',
+                  objectFit: 'cover',
+                  borderRadius: '15px',
+                }}
+              />
+              <Typography sx={{ color: 'textPrimary', fontWeight: 'bolder' }}>
+                {cast.name}
+              </Typography>
+              <Typography sx={{ color: 'textPrimary', fontSize: 's' }}>
+                (
+                {cast.character.includes('/')
+                  ? cast.character.split('/')[0]
+                  : cast.character}
+                )
+              </Typography>
+            </Grid>
           ))}
         </Grid>
       </Grid>
