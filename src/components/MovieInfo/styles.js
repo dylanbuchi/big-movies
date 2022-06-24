@@ -4,18 +4,23 @@ import { styled } from '@mui/material/styles';
 export const MoviePoster = styled('img')(({ theme }) => ({
   borderRadius: '25px',
   boxShadow: '0.5em 0.5em 0.5em grey',
-  width: '80%',
+  width: '90%',
+  height: '700px',
+
+  [theme.breakpoints.down('lg')]: {
+    margin: '0 auto',
+    width: '280px',
+    height: '400px',
+  },
 
   [theme.breakpoints.down('md')]: {
-    margin: '0 auto',
     width: '50%',
-    height: '350px',
+    height: '550px',
   },
 
   [theme.breakpoints.down('sm')]: {
-    margin: '0 auto',
-    width: '60%',
-    height: '350px',
+    width: '65%',
+    height: '355px',
     marginBottom: '30px',
   },
 }));
@@ -23,10 +28,11 @@ export const MoviePoster = styled('img')(({ theme }) => ({
 export const StyledGrid = styled(Grid)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-around',
-  my: '10px',
 
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     flexDirection: 'column',
     flexWrap: 'wrap',
+    marginLeft: '12px',
+    paddingRight: '12px',
   },
 }));
