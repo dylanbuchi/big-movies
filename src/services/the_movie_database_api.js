@@ -45,8 +45,16 @@ export const theMovieDatabaseApi = createApi({
       // get movie genre titles
       query: () => `genre/movie/list?${apiKeyUrl}`,
     }),
+
+    getMovieInfo: builder.query({
+      query: (movieId) =>
+        `/movie/${movieId}?${apiKeyUrl}&append_to_response=videos,credits`,
+    }),
   }),
 });
 
-export const { useGetMoviesQuery, useGetMovieGenresQuery } =
-  theMovieDatabaseApi;
+export const {
+  useGetMoviesQuery,
+  useGetMovieGenresQuery,
+  useGetMovieInfoQuery,
+} = theMovieDatabaseApi;
