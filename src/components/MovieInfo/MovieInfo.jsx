@@ -1,7 +1,25 @@
 import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
-import { Box, Grid, Rating, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Grid,
+  Rating,
+  Typography,
+} from '@mui/material';
+
+import {
+  ArrowBack,
+  Favorite,
+  FavoriteBorder,
+  Language,
+  Movie,
+  PlusOne,
+  Remove,
+  Theaters,
+} from '@mui/icons-material';
 
 import { useGetMovieInfoQuery } from '../../services/the_movie_database_api';
 import { MoviePoster, StyledGrid } from './styles';
@@ -44,7 +62,25 @@ const MovieInfo = () => {
     topCast: data?.credits?.cast
       .filter((cast) => cast?.profile_path)
       .slice(0, 6),
+
+    website: data?.homepage,
+    imdb: `https://imdb.com/title/${data?.imdb_id}`,
   };
+
+  const isMovieInWatchList = false;
+  const isMovieInFavorites = false;
+
+  const addMovieToFavorites = () => {};
+  const addMovieToWatchList = () => {};
+
+  const displayButtonStyles = (theme) => ({
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
+  });
 
   return (
     <StyledGrid container>
@@ -162,7 +198,7 @@ const MovieInfo = () => {
               <Typography sx={{ color: 'textPrimary', fontWeight: 'bolder' }}>
                 {cast.name}
               </Typography>
-              <Typography sx={{ color: 'textPrimary', fontSize: 's' }}>
+              <Typography sx={{ color: 'textPrimary', fontSize: 'small' }}>
                 (
                 {cast.character.includes('/')
                   ? cast.character.split('/')[0]
@@ -171,6 +207,49 @@ const MovieInfo = () => {
               </Typography>
             </Grid>
           ))}
+        </Grid>
+        <Grid item container style={{ marginTop: '2rem' }}>
+          <Box sx={displayButtonStyles}>
+            <Grid item xs={12} sm={6} sx={displayButtonStyles}>
+              <ButtonGroup size="small" variant="outlined">
+                <Button
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  endIcon={<Language />}
+                  href={movieInfo.website}
+                >
+                  Website
+                </Button>
+                <Button
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  endIcon={<Movie />}
+                  href={movieInfo.imdb}
+                >
+                  IMDB
+                </Button>
+                <Button endIcon={<Theaters />} href="#">
+                  Trailer
+                </Button>
+              </ButtonGroup>
+            </Grid>
+            <Grid item xs={12} sm={6} sx={displayButtonStyles}>
+              <ButtonGroup size="small" variant="outlined">
+                <Button onClick={addMovieToFavorites}>
+                  {isMovieInFavorites ? <FavoriteBorder /> : <Favorite />}
+                </Button>
+                <Button
+                  onClick={addMovieToWatchList}
+                  endIcon={isMovieInWatchList ? <Remove /> : <PlusOne />}
+                >
+                  WatchList
+                </Button>
+                <Button href="/" endIcon={<ArrowBack />}>
+                  Back
+                </Button>
+              </ButtonGroup>
+            </Grid>
+          </Box>
         </Grid>
       </Grid>
     </StyledGrid>
