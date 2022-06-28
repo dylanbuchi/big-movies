@@ -21,20 +21,28 @@ import {
   Theaters,
 } from '@mui/icons-material';
 
-import { useGetMovieInfoQuery } from '../../services/the_movie_database_api';
+import {
+  useGetMovieInfoQuery,
+  useGetMovieRecommendationsQuery,
+} from '../../services/the_movie_database_api';
 import { MoviePoster, StyledGrid } from './styles';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
+import MovieList from '../MovieList/MovieList';
 
 const MovieInfo = () => {
   const dispatch = useDispatch();
   const { id: movieId } = useParams();
 
   const { data, isFetching, isError } = useGetMovieInfoQuery(movieId);
+  const movieRecommendationQueryResponse = useGetMovieRecommendationsQuery({
+    movieId,
+    list: '/recommendations',
+  });
 
   const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
-  console.log(data);
+
   if (isError) {
     return <Box>Error</Box>;
   }
@@ -52,7 +60,7 @@ const MovieInfo = () => {
     overview: data?.overview,
 
     description: data?.overview,
-    rating: parseFloat((data.vote_average / 1.75).toFixed(1)),
+    rating: parseFloat((data.vote_average / 1.6).toFixed(1)),
 
     runtime: data?.runtime,
     languages: data?.spoken_languages.map((item) => item.name),
@@ -81,6 +89,13 @@ const MovieInfo = () => {
       flexDirection: 'column',
     },
   });
+
+  const handleCastCharacterName = (name) => {
+    const result = name.includes('/') ? name.split('/')[0] : name;
+    return result ? `(${result})` : '';
+  };
+
+  console.log(movieRecommendationQueryResponse.data);
 
   return (
     <StyledGrid container>
@@ -117,7 +132,7 @@ const MovieInfo = () => {
                 ml: '10px',
               }}
             >
-              {movieInfo.rating} / 10
+              {movieInfo.rating} / 5
             </Typography>
           </Box>
           <Typography align="center" gutterBottom variant="h6" mt="20px">
@@ -182,7 +197,16 @@ const MovieInfo = () => {
               xs={4}
               md={2}
               component={Link}
-              sx={{ textDecoration: 'none', color: 'black' }}
+              sx={{
+                textDecoration: 'none',
+                color: 'black',
+                '&:hover': {
+                  cursor: 'pointer',
+                  textShadow: '0.1px 0.1px',
+                  filter: 'brightness(1.10)',
+                  transform: 'scale(1.01)',
+                },
+              }}
               to="/actors/"
             >
               <img
@@ -199,11 +223,7 @@ const MovieInfo = () => {
                 {cast.name}
               </Typography>
               <Typography sx={{ color: 'textPrimary', fontSize: 'small' }}>
-                (
-                {cast.character.includes('/')
-                  ? cast.character.split('/')[0]
-                  : cast.character}
-                )
+                {handleCastCharacterName(cast.character)}
               </Typography>
             </Grid>
           ))}
@@ -252,6 +272,22 @@ const MovieInfo = () => {
           </Box>
         </Grid>
       </Grid>
+      <Box width="100%" marginTop="5rem">
+        <Typography variant="h4" align="center" gutterBottom>
+          More Like This
+          <br />
+          {movieRecommendationQueryResponse?.data ? (
+            <Box marginTop="50px">
+              <MovieList
+                movies={movieRecommendationQueryResponse.data}
+                length={6}
+              />
+            </Box>
+          ) : (
+            ''
+          )}
+        </Typography>
+      </Box>
     </StyledGrid>
   );
 };
