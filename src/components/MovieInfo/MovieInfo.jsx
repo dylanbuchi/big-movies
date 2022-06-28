@@ -6,6 +6,7 @@ import {
   Button,
   ButtonGroup,
   Grid,
+  Modal,
   Rating,
   Typography,
 } from '@mui/material';
@@ -21,11 +22,12 @@ import {
   Theaters,
 } from '@mui/icons-material';
 
+import { useState } from 'react';
 import {
   useGetMovieInfoQuery,
   useGetMovieRecommendationsQuery,
 } from '../../services/the_movie_database_api';
-import { MoviePoster, StyledGrid } from './styles';
+import { MoviePoster, StyledGrid, StyledIFrame } from './styles';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
@@ -40,6 +42,8 @@ const MovieInfo = () => {
     movieId,
     list: '/recommendations',
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
 
@@ -73,6 +77,9 @@ const MovieInfo = () => {
 
     website: data?.homepage,
     imdb: `https://imdb.com/title/${data?.imdb_id}`,
+    trailer: data?.videos?.results
+      .filter((item) => item?.name.includes('Trailer'))
+      .slice(0, 1)[0],
   };
 
   const isMovieInWatchList = false;
@@ -94,8 +101,6 @@ const MovieInfo = () => {
     const result = name.includes('/') ? name.split('/')[0] : name;
     return result ? `(${result})` : '';
   };
-
-  console.log(movieRecommendationQueryResponse.data);
 
   return (
     <StyledGrid container>
@@ -248,9 +253,16 @@ const MovieInfo = () => {
                 >
                   IMDB
                 </Button>
-                <Button endIcon={<Theaters />} href="#">
-                  Trailer
-                </Button>
+
+                {movieInfo.trailer && (
+                  <Button
+                    onClick={() => setIsModalOpen(true)}
+                    endIcon={<Theaters />}
+                    href="#"
+                  >
+                    Trailer
+                  </Button>
+                )}
               </ButtonGroup>
             </Grid>
             <Grid item xs={12} sm={6} sx={displayButtonStyles}>
@@ -288,6 +300,26 @@ const MovieInfo = () => {
           )}
         </Typography>
       </Box>
+
+      {movieInfo.trailer && (
+        <Modal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          closeAfterTransition
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <StyledIFrame
+            allowFullScreen
+            title="Trailer"
+            src={`https://www.youtube.com/embed/${movieInfo.trailer.key}?autoplay=1&vq=hd1280`}
+            allow="autoplay"
+          />
+        </Modal>
+      )}
     </StyledGrid>
   );
 };
