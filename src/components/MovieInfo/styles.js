@@ -36,3 +36,14 @@ export const StyledGrid = styled(Grid)(({ theme }) => ({
     paddingRight: '12px',
   },
 }));
+
+export const StyledIFrame = styled('iframe')(({ theme }) => ({
+  width: '70%',
+  height: '70%',
+  justifyContent: 'center',
+
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    height: '40%',
+  },
+}));
