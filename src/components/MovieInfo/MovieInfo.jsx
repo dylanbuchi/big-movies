@@ -285,9 +285,16 @@ const MovieInfo = () => {
         </Grid>
       </Grid>
       <Box width="100%" marginTop="5rem">
-        <Typography variant="h4" align="center" gutterBottom>
+        <Typography variant="h4" align="left" gutterBottom>
           More Like This
-          <br />
+        </Typography>
+        <Box
+          sx={(theme) => ({
+            [theme.breakpoints.up('lg')]: {
+              ml: '45px',
+            },
+          })}
+        >
           {movieRecommendationQueryResponse?.data ? (
             <Box marginTop="50px">
               <MovieList
@@ -298,7 +305,7 @@ const MovieInfo = () => {
           ) : (
             ''
           )}
-        </Typography>
+        </Box>
       </Box>
 
       {movieInfo.trailer && (
