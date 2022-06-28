@@ -50,6 +50,10 @@ export const theMovieDatabaseApi = createApi({
       query: (movieId) =>
         `/movie/${movieId}?${apiKeyUrl}&append_to_response=videos,credits`,
     }),
+
+    getMovieRecommendations: builder.query({
+      query: ({ movieId, list }) => `/movie/${movieId}/${list}?${apiKeyUrl}`,
+    }),
   }),
 });
 
@@ -57,4 +61,5 @@ export const {
   useGetMoviesQuery,
   useGetMovieGenresQuery,
   useGetMovieInfoQuery,
+  useGetMovieRecommendationsQuery,
 } = theMovieDatabaseApi;
