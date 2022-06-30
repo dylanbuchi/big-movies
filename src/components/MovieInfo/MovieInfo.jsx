@@ -107,7 +107,7 @@ const MovieInfo = () => {
     overview: data?.overview,
 
     description: data?.overview,
-    rating: parseFloat((data.vote_average / 1.6).toFixed(1)),
+    rating: parseFloat((data.vote_average / 1.8).toFixed(1)),
 
     runtime: data?.runtime,
     languages: data?.spoken_languages.map((item) => item.name),
