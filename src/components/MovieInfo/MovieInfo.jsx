@@ -212,7 +212,7 @@ const MovieInfo = () => {
                   transform: 'scale(1.01)',
                 },
               }}
-              to="/actors/"
+              to={`/actors/${cast.id}`}
             >
               <img
                 src={`${movieImageUrl}${cast.profile_path}`}
