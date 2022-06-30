@@ -1,5 +1,6 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Box, Button, Grid, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   useGetActorInfoQuery,
@@ -7,9 +8,10 @@ import {
 } from '../../services/the_movie_database_api';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import MovieList from '../MovieList/MovieList';
+import Pagination from '../Pagination/Pagination';
 
 const Actors = () => {
-  const page = 1;
+  const [page, setPage] = useState(1);
   const navigation = useNavigate();
   const { id: actorId } = useParams();
   const { data, isFetching } = useGetActorInfoQuery(actorId);
@@ -20,7 +22,7 @@ const Actors = () => {
   });
 
   if (isFetching) {
-    return LoadingIcon;
+    return <LoadingIcon />;
   }
 
   const actorInfo = {
@@ -33,7 +35,7 @@ const Actors = () => {
   };
 
   return (
-    <div>
+    <Box>
       <Grid container spacing={3}>
         <Grid item xl={4} lg={5} sx={{ justifyContent: 'center' }}>
           <img
@@ -146,7 +148,12 @@ const Actors = () => {
           <MovieList movies={moviesByActorResponse?.data} length={6} />
         )}
       </Box>
-    </div>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={moviesByActorResponse?.data?.total_pages}
+      />
+    </Box>
   );
 };
 
