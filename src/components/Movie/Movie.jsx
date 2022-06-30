@@ -1,7 +1,7 @@
 import { Typography, Grid, Grow } from '@mui/material';
 import { StyledLink, MoviePoster, typographyStyle } from './styles';
 
-export const Movie = ({ movie, index }) => {
+export const Movie = ({ movie, index, margin }) => {
   const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
   const noImageUrL =
     'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';
@@ -12,7 +12,7 @@ export const Movie = ({ movie, index }) => {
       : `${movieTitle.split('').splice(0, 18).join('')}...`;
 
   return (
-    <Grid item lg={3} xl={2} marginBottom="50px">
+    <Grid item lg={3} xl={2} marginBottom="50px" margin={margin}>
       <Grow in key={index} timeout={(index + 1) * 225}>
         <StyledLink to={`/movies/${movie.id}`}>
           <MoviePoster
