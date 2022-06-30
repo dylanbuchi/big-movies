@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 import {
@@ -22,28 +22,71 @@ import {
   Theaters,
 } from '@mui/icons-material';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import axios from 'axios';
+
 import {
   useGetMovieInfoQuery,
   useGetMovieRecommendationsQuery,
+  useGetUserMovieListQuery,
 } from '../../services/the_movie_database_api';
 import { MoviePoster, StyledGrid, StyledIFrame } from './styles';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
 import MovieList from '../MovieList/MovieList';
+import Pagination from '../Pagination/Pagination';
 
 const MovieInfo = () => {
+  const [isMovieInWatchList, setIsMovieInWatchList] = useState(false);
+  const [isMovieInFavorites, setIsMovieInFavorites] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { user } = useSelector((state) => state.userAuthentication);
+
   const dispatch = useDispatch();
   const { id: movieId } = useParams();
 
   const { data, isFetching, isError } = useGetMovieInfoQuery(movieId);
+
   const movieRecommendationQueryResponse = useGetMovieRecommendationsQuery({
     movieId,
     list: '/recommendations',
+    page,
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: favoritesData, refetch: refetchFavorites } =
+    useGetUserMovieListQuery({
+      listName: 'favorite/movies',
+      accountId: user.id,
+      sessionId: localStorage.getItem('session_id'),
+    });
+
+  const { data: watchListData, refetch: refetchWatchList } =
+    useGetUserMovieListQuery({
+      listName: 'watchlist/movies',
+      accountId: user.id,
+      sessionId: localStorage.getItem('session_id'),
+    });
+
+  const checkMovieId = (movies) =>
+    movies?.find((movie) => movie?.id === data?.id);
+
+  useEffect(() => {
+    refetchWatchList();
+    refetchFavorites();
+  }, [data]);
+
+  useEffect(() => {
+    setIsMovieInWatchList(checkMovieId(watchListData?.results));
+  }, [data, watchListData]);
+
+  useEffect(() => {
+    setIsMovieInFavorites(checkMovieId(favoritesData?.results));
+  }, [data, favoritesData]);
 
   const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
 
@@ -82,11 +125,42 @@ const MovieInfo = () => {
       .slice(0, 1)[0],
   };
 
-  const isMovieInWatchList = false;
-  const isMovieInFavorites = false;
+  const addMovieToFavorites = async () => {
+    const url = ` https://api.themoviedb.org/3/account/${
+      user.id
+    }/favorite?api_key=${
+      process.env.REACT_APP_THE_MOVIE_DATABASE_API_KEY
+    }&session_id=${localStorage.getItem('session_id')}`;
 
-  const addMovieToFavorites = () => {};
-  const addMovieToWatchList = () => {};
+    await axios.post(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      media_type: 'movie',
+      media_id: movieId,
+      favorite: !isMovieInFavorites,
+    });
+
+    setIsMovieInFavorites((prev) => !prev);
+  };
+  const addMovieToWatchList = async () => {
+    const url = `https://api.themoviedb.org/3/account/${
+      user.id
+    }/watchlist?api_key=${
+      process.env.REACT_APP_THE_MOVIE_DATABASE_API_KEY
+    }&session_id=${localStorage.getItem('session_id')}`;
+
+    await axios.post(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      media_type: 'movie',
+      media_id: movieId,
+      watchlist: !isMovieInWatchList,
+    });
+
+    setIsMovieInWatchList((prev) => !prev);
+  };
 
   const displayButtonStyles = (theme) => ({
     display: 'flex',
@@ -268,13 +342,13 @@ const MovieInfo = () => {
             <Grid item xs={12} sm={6} sx={displayButtonStyles}>
               <ButtonGroup size="small" variant="outlined">
                 <Button onClick={addMovieToFavorites}>
-                  {isMovieInFavorites ? <FavoriteBorder /> : <Favorite />}
+                  {isMovieInFavorites ? <Favorite /> : <FavoriteBorder />}
                 </Button>
                 <Button
                   onClick={addMovieToWatchList}
                   endIcon={isMovieInWatchList ? <Remove /> : <PlusOne />}
                 >
-                  WatchList
+                  {isMovieInWatchList ? 'Remove' : 'Add'}
                 </Button>
                 <Button href="/" endIcon={<ArrowBack />}>
                   Back
@@ -285,9 +359,15 @@ const MovieInfo = () => {
         </Grid>
       </Grid>
       <Box width="100%" marginTop="5rem">
-        <Typography variant="h4" align="left" gutterBottom>
-          More Like This
-        </Typography>
+        {movieRecommendationQueryResponse?.data?.total_pages ? (
+          <Typography variant="h4" align="left" gutterBottom>
+            More Like This
+          </Typography>
+        ) : (
+          ''
+        )}
+        <Typography />
+
         <Box
           sx={(theme) => ({
             [theme.breakpoints.up('lg')]: {
@@ -298,14 +378,19 @@ const MovieInfo = () => {
           {movieRecommendationQueryResponse?.data ? (
             <Box marginTop="50px">
               <MovieList
-                movies={movieRecommendationQueryResponse.data}
+                movies={movieRecommendationQueryResponse?.data}
                 length={6}
               />
             </Box>
           ) : (
-            ''
+            's'
           )}
         </Box>
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalPages={movieRecommendationQueryResponse?.data?.total_pages}
+        />
       </Box>
 
       {movieInfo.trailer && (
