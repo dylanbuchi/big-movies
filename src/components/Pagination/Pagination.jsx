@@ -9,6 +9,8 @@ const Pagination = ({ page, totalPages, setPage }) => {
     setPage((prevPage) => prevPage - 1);
   };
 
+  if (!totalPages) return null;
+
   return (
     <Box
       sx={{
