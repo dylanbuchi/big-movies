@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useGetMoviesQuery } from '../../services/the_movie_database_api';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
-import { MovieList, Pagination } from '..';
+import { FeaturedMovie, MovieList, Pagination } from '..';
 
 const Movies = () => {
   const [page, setPage] = useState(1);
@@ -47,7 +47,8 @@ const Movies = () => {
 
   return (
     <Box>
-      <MovieList movies={data} length={data.results.length} />
+      <FeaturedMovie movie={data?.results[0]} />
+      <MovieList movies={data} length={data.results.length} startIndex={1} />
 
       <Pagination
         page={page}
