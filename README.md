@@ -1,6 +1,6 @@
 # Big Movies
 
-Built a Netflix web app like using React and Redux.
+Built a Netflix web app like using React, Redux and Material UI.
 
 ## Live:
 
