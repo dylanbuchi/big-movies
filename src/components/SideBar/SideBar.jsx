@@ -13,6 +13,7 @@ import { LinkImage, Image, StyledLink } from './styles';
 import { useGetMovieGenresQuery } from '../../services/the_movie_database_api';
 
 import movieGenreIcons from '../../assets/images/movie_genres';
+import logos from '../../assets/images/logos';
 import { searchMovie } from '../../features/search_movie';
 
 import { LoadingIcon } from '..';
@@ -30,9 +31,6 @@ const SideBar = ({ setMobileOpen }) => {
   const removeSearchMovieState = () => dispatch(searchMovie(''));
   const { data, isFetching } = useGetMovieGenresQuery();
 
-  const darkLogo = '';
-  const lightLogo = '';
-
   const movieCategories = [
     { label: 'Popular', value: 'popular' },
     { label: 'Top Rated', value: 'top_rated' },
@@ -43,7 +41,15 @@ const SideBar = ({ setMobileOpen }) => {
   return (
     <>
       <LinkImage to="/" />
-      <Image src={theme.palette.mode === 'dark' ? darkLogo : lightLogo} />
+      <Image
+        src={theme.palette.mode === 'dark' ? logos.red : logos.blue}
+        height="50px"
+        width="200px"
+        style={{
+          marginLeft: '30px',
+          marginBottom: '35px',
+        }}
+      />
       <Divider />
       <List>
         <ListSubheader>Categories</ListSubheader>
@@ -81,6 +87,9 @@ const SideBar = ({ setMobileOpen }) => {
                     src={movieGenreIcons[name.toLowerCase()]}
                     height="35px"
                     width="35px"
+                    style={{
+                      filter: theme.palette.mode === 'dark' && 'invert(1)',
+                    }}
                   />
                 </ListItemIcon>
                 <ListItemText primary={name} />

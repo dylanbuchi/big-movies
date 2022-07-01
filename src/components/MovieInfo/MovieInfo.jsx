@@ -276,16 +276,16 @@ const MovieInfo = () => {
               xs={4}
               md={2}
               component={Link}
-              sx={{
+              sx={(theme) => ({
                 textDecoration: 'none',
-                color: 'black',
+                color: theme.palette.mode === 'dark' ? 'white' : 'black',
                 '&:hover': {
                   cursor: 'pointer',
                   textShadow: '0.1px 0.1px',
                   filter: 'brightness(1.10)',
                   transform: 'scale(1.01)',
                 },
-              }}
+              })}
               to={`/actors/${cast.id}`}
             >
               <img

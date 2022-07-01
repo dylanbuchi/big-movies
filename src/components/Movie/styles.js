@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 
 import { styled } from '@mui/material/styles';
 
-export const StyledLink = styled(Link)(() => ({
+export const StyledLink = styled(Link)(({ theme }) => ({
+  color: theme.palette.mode === 'dark' ? 'white' : 'black',
   alignItems: 'center',
   fontWeight: 'bolder',
   textDecoration: 'none',
@@ -31,7 +32,6 @@ export const MoviePoster = styled('img')(({ theme }) => ({
 }));
 
 export const typographyStyle = {
-  color: 'black',
   textOverflow: 'ellipsis',
 
   alignItems: 'center',

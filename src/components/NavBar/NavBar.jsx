@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -29,10 +29,14 @@ import {
   createUserSessionId,
   theMovieDatabaseApiInstance,
 } from '../../utilities';
+
 import { setUser } from '../../features/user_authentication';
+import { DarkModeContext } from '../../utilities/ToggleDarkMode';
 
 const NavBar = () => {
   const theme = useTheme();
+
+  const darkModeContext = useContext(DarkModeContext);
 
   const maxWidthStr = '(max-width:600px)';
 
@@ -90,7 +94,11 @@ const NavBar = () => {
               <Menu />
             </IconButton>
           )}
-          <IconButton color="inherit" sx={{ ml: 1 }} onClick={() => {}}>
+          <IconButton
+            color="inherit"
+            sx={{ ml: 1 }}
+            onClick={darkModeContext.toggleDarkMode}
+          >
             {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
           {!isMobileDevice && <Search />}
