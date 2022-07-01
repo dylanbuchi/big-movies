@@ -12,7 +12,7 @@ export const Movie = ({ movie, index, margin }) => {
       : `${movieTitle.split('').splice(0, 18).join('')}...`;
 
   return (
-    <Grid item lg={3} xl={2} marginBottom="50px" margin={margin}>
+    <Grid item lg={3} xl={2} margin={margin} marginBottom="50px">
       <Grow in key={index} timeout={(index + 1) * 225}>
         <StyledLink to={`/movies/${movie.id}`}>
           <MoviePoster
