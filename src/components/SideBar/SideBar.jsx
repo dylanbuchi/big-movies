@@ -2,27 +2,28 @@ import {
   Divider,
   List,
   ListItem,
+  ListItemIcon,
   ListItemText,
   ListSubheader,
-  ListItemIcon,
 } from '@mui/material';
 
 import { useTheme } from '@mui/system';
-import { useDispatch, useSelector } from 'react-redux';
-import { LinkImage, Image, StyledLink } from './styles';
+import { useDispatch } from 'react-redux';
 import { useGetMovieGenresQuery } from '../../services/the_movie_database_api';
+import { Image, LinkImage, StyledLink } from './styles';
 
-import movieGenreIcons from '../../assets/images/movie_genres';
 import logos from '../../assets/images/logos';
+import movieGenreIcons from '../../assets/images/movie_genres';
 import { searchMovie } from '../../features/search_movie';
 
 import { LoadingIcon } from '..';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
+import { useClearSearchInput } from '../../utilities/hooks';
 
 const SideBar = ({ setMobileOpen }) => {
   const theme = useTheme();
-
   const dispatch = useDispatch();
+  const clearSearchInput = useClearSearchInput();
 
   const selectMovie = (value) => {
     dispatch(selectMovieCategoryOrGenre(value));
@@ -59,6 +60,7 @@ const SideBar = ({ setMobileOpen }) => {
               onClick={() => {
                 selectMovie(value);
                 removeSearchMovieState();
+                clearSearchInput();
               }}
               button
             >
@@ -79,6 +81,7 @@ const SideBar = ({ setMobileOpen }) => {
                 onClick={() => {
                   selectMovie(id);
                   removeSearchMovieState();
+                  clearSearchInput();
                 }}
                 button
               >

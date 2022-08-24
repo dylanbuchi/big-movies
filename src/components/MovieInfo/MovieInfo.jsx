@@ -33,8 +33,9 @@ import {
 } from '../../services/the_movie_database_api';
 import { MoviePoster, StyledGrid, StyledIFrame } from './styles';
 
-import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
+import { useClearSearchInput } from '../../utilities/hooks';
+import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import MovieList from '../MovieList/MovieList';
 import Pagination from '../Pagination/Pagination';
 
@@ -57,6 +58,8 @@ const MovieInfo = () => {
     list: '/recommendations',
     page,
   });
+
+  const clearSearchInput = useClearSearchInput();
 
   const { data: favoritesData, refetch: refetchFavorites } =
     useGetUserMovieListQuery({
@@ -87,6 +90,8 @@ const MovieInfo = () => {
   useEffect(() => {
     setIsMovieInFavorites(checkMovieId(favoritesData?.results));
   }, [data, favoritesData]);
+
+  useEffect(() => clearSearchInput(), []);
 
   const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
 

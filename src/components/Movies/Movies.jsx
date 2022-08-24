@@ -1,11 +1,13 @@
 import { Box, Typography } from '@mui/material';
-import { useState } from 'react';
+
 import { useSelector } from 'react-redux';
 
+import { useState } from 'react';
 import { useGetMoviesQuery } from '../../services/the_movie_database_api';
 
-import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import { FeaturedMovie, MovieList, Pagination } from '..';
+
+import LoadingIcon from '../LoadingIcon/LoadingIcon';
 
 const Movies = () => {
   const [page, setPage] = useState(1);

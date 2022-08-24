@@ -1,32 +1,32 @@
-import { useState, useEffect, useContext } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { useTheme } from '@mui/material/styles';
 
 import {
-  Box,
   AppBar,
-  IconButton,
-  Button,
   Avatar,
-  useMediaQuery,
+  Box,
+  Button,
   Drawer,
+  IconButton,
+  useMediaQuery,
 } from '@mui/material/';
 
 import {
-  Menu,
   AccountCircle,
-  Brightness7,
   Brightness4,
+  Brightness7,
+  Menu,
 } from '@mui/icons-material';
 
+import { Search, SideBar } from '..';
 import { StyledToolBar } from './styles';
-import { SideBar, Search } from '..';
 
 import {
-  fetchAuthenticationToken,
   createUserSessionId,
+  fetchAuthenticationToken,
   theMovieDatabaseApiInstance,
 } from '../../utilities';
 

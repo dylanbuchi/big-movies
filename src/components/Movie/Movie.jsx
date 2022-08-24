@@ -1,7 +1,13 @@
-import { Typography, Grid, Grow } from '@mui/material';
-import { StyledLink, MoviePoster, typographyStyle } from './styles';
+import { Grid, Grow, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { useClearSearchInput } from '../../utilities/hooks';
+import { MoviePoster, StyledLink, typographyStyle } from './styles';
 
 export const Movie = ({ movie, index, margin }) => {
+  const clearSearchInput = useClearSearchInput();
+
+  useEffect(() => clearSearchInput(), []);
+
   const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
   const noImageUrL =
     'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';

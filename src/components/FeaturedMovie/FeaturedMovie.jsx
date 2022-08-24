@@ -1,4 +1,4 @@
-import { Box, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const FeaturedMovie = ({ movie }) => {

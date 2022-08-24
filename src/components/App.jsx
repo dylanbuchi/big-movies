@@ -1,6 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
-
+import { Route, Routes } from 'react-router-dom';
 import { Actors, MovieInfo, Movies, NavBar, Profile } from '.';
 import { DivRoot, DivToolbar, MainContent } from './styles';
 

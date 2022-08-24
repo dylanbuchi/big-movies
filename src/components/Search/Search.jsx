@@ -1,31 +1,32 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Search as SearchIcon } from '@mui/icons-material';
-import { TextField, InputAdornment, Box, Button } from '@mui/material';
-import { searchMovie } from '../../features/search_movie';
+import { Box, Button, InputAdornment, TextField } from '@mui/material';
+import { searchMovie, setInputField } from '../../features/search_movie';
+import { useClearSearchInput } from '../../utilities/hooks';
 
 const Search = () => {
-  const [query, setQuery] = useState('');
+  const { searchInputField } = useSelector((state) => state.searchMovie);
 
   const dispatch = useDispatch();
+  const clearSearchInput = useClearSearchInput();
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      dispatch(searchMovie(query));
+      dispatch(searchMovie(searchInputField));
     }
   };
 
-  const clearTextFieldInput = () => {
-    setQuery('');
+  const setSearchInputField = (value) => {
+    dispatch(setInputField(value));
   };
 
   const displayClearButton = () => {
-    if (query) {
+    if (searchInputField) {
       return (
         <Button
           onClick={() => {
-            clearTextFieldInput();
+            clearSearchInput();
             dispatch(searchMovie(''));
           }}
           variant="contained"
@@ -56,9 +57,9 @@ const Search = () => {
     >
       <TextField
         onKeyDown={handleKeyPress}
-        value={query}
+        value={searchInputField}
         onChange={(event) => {
-          setQuery(event.target.value);
+          setSearchInputField(event.target.value);
         }}
         variant="standard"
         placeholder="Search..."
