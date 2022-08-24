@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Search as SearchIcon } from '@mui/icons-material';
 import { Box, Button, InputAdornment, TextField } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import { searchMovie, setInputField } from '../../features/search_movie';
 import { useClearSearchInput } from '../../utilities/hooks';
 
@@ -20,6 +21,8 @@ const Search = () => {
   const setSearchInputField = (value) => {
     dispatch(setInputField(value));
   };
+
+  const location = useLocation();
 
   const displayClearButton = () => {
     if (searchInputField) {
@@ -43,6 +46,8 @@ const Search = () => {
     }
     return '';
   };
+
+  if (location.pathname !== '/') return null;
 
   return (
     <Box
