@@ -1,10 +1,11 @@
 import { useState, useMemo, createContext } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { PaletteMode } from '@mui/material';
 
 export const DarkModeContext = createContext({});
 
-const ToggleDarkMode = ({ children }) => {
-  const [colorMode, setColorMode] = useState('light');
+const ToggleDarkMode = ({ children }: React.PropsWithChildren) => {
+  const [colorMode, setColorMode] = useState<PaletteMode>('light');
 
   const toggleDarkMode = () => {
     setColorMode((prevColorMode) =>
@@ -22,16 +23,14 @@ const ToggleDarkMode = ({ children }) => {
     [colorMode],
   );
 
-  const valueObject = {
+  const value = {
     mode: colorMode,
     setMode: setColorMode,
     toggleDarkMode,
   };
 
-  const wrapValueObject = useMemo(() => valueObject, [valueObject]);
-
   return (
-    <DarkModeContext.Provider value={wrapValueObject}>
+    <DarkModeContext.Provider value={value}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </DarkModeContext.Provider>
   );
