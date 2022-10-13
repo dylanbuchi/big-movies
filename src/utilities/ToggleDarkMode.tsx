@@ -2,7 +2,10 @@ import { useState, useMemo, createContext } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { PaletteMode } from '@mui/material';
 
-export const DarkModeContext = createContext({});
+interface DarkModeContextProps {
+  toggleDarkMode: () => void;
+}
+export const DarkModeContext = createContext({} as DarkModeContextProps);
 
 const ToggleDarkMode = ({ children }: React.PropsWithChildren) => {
   const [colorMode, setColorMode] = useState<PaletteMode>('light');
