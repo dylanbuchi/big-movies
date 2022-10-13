@@ -1,8 +1,15 @@
 import { Grid } from '@mui/material';
 
 import { Movie } from '..';
+import { MoviesData } from '../../interfaces/movies';
 
-const MovieList = ({ movies, length, startIndex }) => (
+export interface MovieListProps {
+  movies: MoviesData;
+  length: number;
+  startIndex?: number;
+}
+
+const MovieList = ({ movies, length, startIndex }: MovieListProps) => (
   <Grid
     marginLeft={{ sm: '5px', md: '-40px', lg: '-60px' }}
     container
