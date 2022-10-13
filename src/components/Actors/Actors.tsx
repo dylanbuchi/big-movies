@@ -1,13 +1,12 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Box, Button, Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ActorInfo } from '../../interfaces/actors';
 import {
   useGetActorInfoQuery,
   useGetMoviesByActorQuery,
 } from '../../services/the_movie_database_api';
-import { useClearSearchInput } from '../../utilities/hooks';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import MovieList from '../MovieList/MovieList';
 import Pagination from '../Pagination/Pagination';
@@ -22,9 +21,6 @@ const Actors = () => {
     actorId,
     page,
   });
-  const clearSearchInput = useClearSearchInput();
-
-  useEffect(() => clearSearchInput(), [clearSearchInput]);
 
   if (isFetching) {
     return <LoadingIcon />;
