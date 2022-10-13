@@ -1,8 +1,8 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-
 import { useNavigate, useParams } from 'react-router-dom';
+import { ActorInfo } from '../../interfaces/actors';
 import {
   useGetActorInfoQuery,
   useGetMoviesByActorQuery,
@@ -24,13 +24,13 @@ const Actors = () => {
   });
   const clearSearchInput = useClearSearchInput();
 
-  useEffect(() => clearSearchInput(), []);
+  useEffect(() => clearSearchInput(), [clearSearchInput]);
 
   if (isFetching) {
     return <LoadingIcon />;
   }
 
-  const actorInfo = {
+  const actorInfo: ActorInfo = {
     name: data?.name,
     profileImagePath: data?.profile_path,
 
