@@ -32,6 +32,7 @@ import {
 
 import { setUser } from '../../features/user_authentication';
 import { DarkModeContext } from '../../utilities/ToggleDarkMode';
+import { RootState } from '../../app/store';
 
 const NavBar = () => {
   const theme = useTheme();
@@ -53,7 +54,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
 
   const { isAuthenticated, user } = useSelector(
-    (state) => state.userAuthentication,
+    (state: RootState) => state.userAuthentication,
   );
 
   useEffect(() => {
@@ -77,7 +78,7 @@ const NavBar = () => {
       }
     };
     login();
-  }, [requestToken]);
+  }, [requestToken, dispatch, userSessionId]);
 
   return (
     <Box>
@@ -119,7 +120,6 @@ const NavBar = () => {
                 color="inherit"
                 component={Link}
                 to={`/profile/${user.id}`}
-                onClick={() => {}}
               >
                 {!isMobileDevice && <>My Movies &nbsp;</>}
                 <Avatar
@@ -146,7 +146,7 @@ const NavBar = () => {
               }}
               ModalProps={{ keepMounted: true }}
             >
-              <SideBar setMobileOpen={setMobileOpen} />
+              <SideBar />
             </Drawer>
           ) : (
             <Drawer
@@ -156,7 +156,7 @@ const NavBar = () => {
               }}
               open
             >
-              <SideBar setMobileOpen={setMobileOpen} />
+              <SideBar />
             </Drawer>
           )}
         </nav>
