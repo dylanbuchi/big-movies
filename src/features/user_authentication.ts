@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import { User } from '../interfaces/users';
 export const userAuthenticationSlice = createSlice({
   name: 'userAuthentication',
   initialState: {
     isAuthenticated: false,
     sessionId: '',
-    user: {},
+    user: {} as User,
   },
   reducers: {
     setUser: (state, action) => {
