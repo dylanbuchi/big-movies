@@ -1,7 +1,11 @@
 import blue from './bigmovies-blue.png';
 import red from './bigmovies-red.png';
 
-const logos = {
+interface MovieLogo {
+  [key: string]: string;
+}
+
+const logos: MovieLogo = {
   blue,
   red,
 };

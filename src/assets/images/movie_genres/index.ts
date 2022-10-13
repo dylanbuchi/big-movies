@@ -26,7 +26,11 @@ import thriller from './thriller.png';
 import war from './war.png';
 import western from './western.png';
 
-const movieGenreIcons = {
+interface MovieGenreIcons {
+  readonly [index: string]: string;
+}
+
+const movieGenreIcons: MovieGenreIcons = {
   action,
   adventure,
   animation,
