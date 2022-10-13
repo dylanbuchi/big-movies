@@ -1,34 +1,45 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { Search as SearchIcon } from '@mui/icons-material';
 import { Box, Button, InputAdornment, TextField } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import { searchMovie, setInputField } from '../../features/search_movie';
-import { useClearSearchInput } from '../../utilities/hooks';
+import { searchMovie } from '../../features/search_movie';
+import { useRef, useState } from 'react';
 
 const Search = () => {
-  const { searchInputField } = useSelector((state) => state.searchMovie);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const dispatch = useDispatch();
-  const clearSearchInput = useClearSearchInput();
+  const [showClearButton, setShowClearButton] = useState(false);
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      dispatch(searchMovie(searchInputField));
-    }
+  const changeInputElementText = (
+    element: HTMLInputElement | null,
+    value: string,
+  ) => {
+    if (!element) return;
+    element.value = value;
   };
 
-  const setSearchInputField = (value) => {
-    dispatch(setInputField(value));
+  const dispatch = useDispatch();
+  const clearSearchInput = () => {
+    changeInputElementText(inputRef.current, '');
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    setShowClearButton(true);
+    if (event.key === 'Enter') {
+      dispatch(searchMovie(inputRef.current?.value));
+      clearSearchInput();
+    }
   };
 
   const location = useLocation();
 
   const displayClearButton = () => {
-    if (searchInputField) {
+    if (showClearButton) {
       return (
         <Button
           onClick={() => {
+            setShowClearButton(false);
             clearSearchInput();
             dispatch(searchMovie(''));
           }}
@@ -62,10 +73,7 @@ const Search = () => {
     >
       <TextField
         onKeyDown={handleKeyPress}
-        value={searchInputField}
-        onChange={(event) => {
-          setSearchInputField(event.target.value);
-        }}
+        inputRef={inputRef}
         variant="standard"
         placeholder="Search..."
         InputProps={{

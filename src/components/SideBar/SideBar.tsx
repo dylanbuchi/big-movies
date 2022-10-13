@@ -18,19 +18,18 @@ import { searchMovie } from '../../features/search_movie';
 
 import { LoadingIcon } from '..';
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
-import { useClearSearchInput } from '../../utilities/hooks';
+import { MovieGenre } from '../../interfaces/movies';
 
-const SideBar = ({ setMobileOpen }) => {
+const SideBar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const clearSearchInput = useClearSearchInput();
 
-  const selectMovie = (value) => {
+  const selectMovie = (value: string) => {
     dispatch(selectMovieCategoryOrGenre(value));
   };
 
   const removeSearchMovieState = () => dispatch(searchMovie(''));
-  const { data, isFetching } = useGetMovieGenresQuery();
+  const { data, isFetching } = useGetMovieGenresQuery({});
 
   const movieCategories = [
     { label: 'Popular', value: 'popular' },
@@ -60,7 +59,6 @@ const SideBar = ({ setMobileOpen }) => {
               onClick={() => {
                 selectMovie(value);
                 removeSearchMovieState();
-                clearSearchInput();
               }}
               button
             >
@@ -75,23 +73,24 @@ const SideBar = ({ setMobileOpen }) => {
         {isFetching ? (
           <LoadingIcon />
         ) : (
-          data.genres.map(({ name, id }) => (
+          data.genres.map(({ name, id }: MovieGenre) => (
             <StyledLink key={name} to="/">
               <ListItem
                 onClick={() => {
                   selectMovie(id);
                   removeSearchMovieState();
-                  clearSearchInput();
                 }}
                 button
               >
                 <ListItemIcon>
                   <img
+                    alt={name}
                     src={movieGenreIcons[name.toLowerCase()]}
                     height="35px"
                     width="35px"
                     style={{
-                      filter: theme.palette.mode === 'dark' && 'invert(1)',
+                      filter:
+                        theme.palette.mode === 'dark' ? 'invert(1)' : undefined,
                     }}
                   />
                 </ListItemIcon>

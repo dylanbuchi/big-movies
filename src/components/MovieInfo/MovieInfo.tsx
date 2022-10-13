@@ -22,7 +22,7 @@ import {
   Theaters,
 } from '@mui/icons-material';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import axios from 'axios';
 
@@ -34,10 +34,19 @@ import {
 import { MoviePoster, StyledGrid, StyledIFrame } from './styles';
 
 import { selectMovieCategoryOrGenre } from '../../features/movie_category_or_genre';
-import { useClearSearchInput } from '../../utilities/hooks';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import MovieList from '../MovieList/MovieList';
 import Pagination from '../Pagination/Pagination';
+import { RootState } from '../../app/store';
+import {
+  MovieCast,
+  MovieData,
+  MovieGenre,
+  MovieDataInfo,
+  MovieLanguage,
+  MovieVideoData,
+} from '../../interfaces/movies';
+import { Theme } from '@mui/system';
 
 const MovieInfo = () => {
   const [isMovieInWatchList, setIsMovieInWatchList] = useState(false);
@@ -46,10 +55,10 @@ const MovieInfo = () => {
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { user } = useSelector((state) => state.userAuthentication);
+  const { user } = useSelector((state: RootState) => state.userAuthentication);
 
   const dispatch = useDispatch();
-  const { id: movieId } = useParams();
+  const { id: movieId = '' } = useParams();
 
   const { data, isFetching, isError } = useGetMovieInfoQuery(movieId);
 
@@ -59,39 +68,37 @@ const MovieInfo = () => {
     page,
   });
 
-  const clearSearchInput = useClearSearchInput();
-
   const { data: favoritesData, refetch: refetchFavorites } =
     useGetUserMovieListQuery({
       listName: 'favorite/movies',
       accountId: user.id,
-      sessionId: localStorage.getItem('session_id'),
+      sessionId: localStorage.getItem('session_id') ?? '',
     });
 
   const { data: watchListData, refetch: refetchWatchList } =
     useGetUserMovieListQuery({
       listName: 'watchlist/movies',
       accountId: user.id,
-      sessionId: localStorage.getItem('session_id'),
+      sessionId: localStorage.getItem('session_id') ?? '',
     });
 
-  const checkMovieId = (movies) =>
-    movies?.find((movie) => movie?.id === data?.id);
+  const checkMovieId = useCallback(
+    (movies: MovieData[]) => movies?.find((movie) => movie?.id === data?.id),
+    [data?.id],
+  );
 
   useEffect(() => {
     refetchWatchList();
     refetchFavorites();
-  }, [data]);
+  }, [data, refetchFavorites, refetchWatchList]);
 
   useEffect(() => {
-    setIsMovieInWatchList(checkMovieId(watchListData?.results));
-  }, [data, watchListData]);
+    setIsMovieInWatchList(Boolean(checkMovieId(watchListData?.results)));
+  }, [data, watchListData, setIsMovieInWatchList, checkMovieId]);
 
   useEffect(() => {
-    setIsMovieInFavorites(checkMovieId(favoritesData?.results));
-  }, [data, favoritesData]);
-
-  useEffect(() => clearSearchInput(), []);
+    setIsMovieInFavorites(Boolean(checkMovieId(favoritesData?.results)));
+  }, [data, favoritesData, setIsMovieInFavorites, checkMovieId]);
 
   const movieImageUrl = 'https://image.tmdb.org/t/p/w500/';
 
@@ -103,7 +110,7 @@ const MovieInfo = () => {
     return <LoadingIcon />;
   }
 
-  const movieInfo = {
+  const movieInfo: MovieDataInfo = {
     title: data?.title,
     poster: data?.poster_path,
     releaseYear: data?.release_date.split('-')[0],
@@ -115,18 +122,20 @@ const MovieInfo = () => {
     rating: parseFloat((data.vote_average / 1.8).toFixed(1)),
 
     runtime: data?.runtime,
-    languages: data?.spoken_languages.map((item) => item.name),
+    languages: data?.spoken_languages.map((item: MovieLanguage) => item.name),
 
     genres: data?.genres,
-    castList: data?.credits?.cast.filter((cast) => cast?.profile_path),
+    castList: data?.credits?.cast.filter(
+      (cast: MovieCast) => cast?.profile_path,
+    ),
     topCast: data?.credits?.cast
-      .filter((cast) => cast?.profile_path)
+      .filter((cast: MovieCast) => cast?.profile_path)
       .slice(0, 6),
 
     website: data?.homepage,
     imdb: `https://imdb.com/title/${data?.imdb_id}`,
     trailer: data?.videos?.results
-      .filter((item) => item?.name.includes('Trailer'))
+      .filter((item: MovieVideoData) => item?.name.includes('Trailer'))
       .slice(0, 1)[0],
   };
 
@@ -167,7 +176,7 @@ const MovieInfo = () => {
     setIsMovieInWatchList((prev) => !prev);
   };
 
-  const displayButtonStyles = (theme) => ({
+  const displayButtonStyles = (theme: Theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     width: '100%',
@@ -176,7 +185,7 @@ const MovieInfo = () => {
     },
   });
 
-  const handleCastCharacterName = (name) => {
+  const handleCastCharacterName = (name: string) => {
     const result = name.includes('/') ? name.split('/')[0] : name;
     return result ? `(${result})` : '';
   };
@@ -231,7 +240,7 @@ const MovieInfo = () => {
             flexWrap: 'wrap',
           }}
         >
-          {movieInfo.genres?.map((genre) => (
+          {movieInfo.genres?.map((genre: MovieGenre) => (
             <Link
               key={genre.name}
               to="/"
@@ -274,7 +283,7 @@ const MovieInfo = () => {
           Top Cast
         </Typography>
         <Grid item container spacing={2}>
-          {movieInfo.topCast.map((cast) => (
+          {movieInfo.topCast.map((cast: MovieCast) => (
             <Grid
               key={`${cast.name.toLocaleLowerCase()}-${cast.character.toLocaleLowerCase()}`}
               item

@@ -1,7 +1,11 @@
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { MovieData } from '../../interfaces/movies';
 
-const FeaturedMovie = ({ movie }) => {
+interface FeaturedMovieProps {
+  movie: MovieData;
+}
+const FeaturedMovie = ({ movie }: FeaturedMovieProps) => {
   if (!movie) return null;
 
   return (

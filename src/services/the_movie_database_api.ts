@@ -5,13 +5,43 @@ const theMovieDatabaseApiKey = process.env.REACT_APP_THE_MOVIE_DATABASE_API_KEY;
 const theMovieDatabaseApiBaseUrl = 'https://api.themoviedb.org/3/';
 const apiKeyUrl = `api_key=${theMovieDatabaseApiKey}`;
 
+interface GetMovieProps {
+  movieCategoryOrGenreId: string | number;
+  page: number;
+  searchMovie: string;
+}
+
+interface GetMovieRecommendationsProps {
+  movieId: string;
+  list: string;
+  page: number;
+}
+
+interface GetMoviesByActorProps {
+  actorId: string;
+  page: number;
+}
+
+interface GetMovieProps {
+  movieCategoryOrGenreId: string | number;
+  page: number;
+  searchMovie: string;
+}
+
+interface GetUserMovieListProps {
+  listName: string;
+  accountId: string;
+  sessionId: string;
+  page?: number;
+}
+
 export const theMovieDatabaseApi = createApi({
   reducerPath: 'theMovieDatabaseApi',
 
   baseQuery: fetchBaseQuery({ baseUrl: theMovieDatabaseApiBaseUrl }),
   endpoints: (builder) => ({
     getMovies: builder.query({
-      query: ({ movieCategoryOrGenreId, page, searchMovie }) => {
+      query: ({ movieCategoryOrGenreId, page, searchMovie }: GetMovieProps) => {
         // get movies by search
         if (searchMovie) {
           return `search/movie?query=${searchMovie}&${apiKeyUrl}&page=${page}`;
@@ -47,26 +77,26 @@ export const theMovieDatabaseApi = createApi({
     }),
 
     getMovieInfo: builder.query({
-      query: (movieId) =>
+      query: (movieId: string) =>
         `/movie/${movieId}?${apiKeyUrl}&append_to_response=videos,credits`,
     }),
 
     getMovieRecommendations: builder.query({
-      query: ({ movieId, list, page }) =>
+      query: ({ movieId, list, page }: GetMovieRecommendationsProps) =>
         `/movie/${movieId}/${list}?${apiKeyUrl}&page=${page}`,
     }),
 
     getActorInfo: builder.query({
-      query: (actorId) => `/person/${actorId}?${apiKeyUrl}`,
+      query: (actorId: string) => `/person/${actorId}?${apiKeyUrl}`,
     }),
 
     getMoviesByActor: builder.query({
-      query: ({ actorId, page }) =>
+      query: ({ actorId, page }: GetMoviesByActorProps) =>
         `/discover/movie?with_cast=${actorId}&page=${page}&${apiKeyUrl}`,
     }),
 
     getUserMovieList: builder.query({
-      query: ({ listName, accountId, sessionId }) =>
+      query: ({ listName, accountId, sessionId }: GetUserMovieListProps) =>
         `/account/${accountId}/${listName}?${apiKeyUrl}&session_id=${sessionId}`,
     }),
   }),

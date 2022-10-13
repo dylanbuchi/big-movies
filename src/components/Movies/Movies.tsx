@@ -8,15 +8,16 @@ import { useGetMoviesQuery } from '../../services/the_movie_database_api';
 import { FeaturedMovie, MovieList, Pagination } from '..';
 
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
+import { RootState } from '../../app/store';
 
 const Movies = () => {
   const [page, setPage] = useState(1);
 
   const { movieCategoryOrGenreId } = useSelector(
-    (state) => state.movieCategoryOrGenre,
+    (state: RootState) => state.movieCategoryOrGenre,
   );
 
-  const { searchMovie } = useSelector((state) => state.searchMovie);
+  const { searchMovie } = useSelector((state: RootState) => state.searchMovie);
 
   const { data, isError, isFetching } = useGetMoviesQuery({
     movieCategoryOrGenreId,

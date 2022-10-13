@@ -5,7 +5,7 @@ import movieCategoryOrGenreSlice_ from '../features/movie_category_or_genre';
 import searchMovieSlice_ from '../features/search_movie';
 import authenticationSlice_ from '../features/user_authentication';
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     [theMovieDatabaseApi.reducerPath]: theMovieDatabaseApi.reducer,
     movieCategoryOrGenre: movieCategoryOrGenreSlice_,
@@ -13,3 +13,8 @@ export default configureStore({
     userAuthentication: authenticationSlice_,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export default store;
