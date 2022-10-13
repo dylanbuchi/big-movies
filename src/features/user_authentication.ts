@@ -10,7 +10,7 @@ export const userAuthenticationSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.isAuthenticated = true;
-      state.sessionId = localStorage.getItem('session_id');
+      state.sessionId = localStorage.getItem('session_id') ?? '';
       state.user = action.payload;
 
       localStorage.setItem('userAccountId', action.payload.id);
