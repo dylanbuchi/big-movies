@@ -14,7 +14,7 @@ import Pagination from '../Pagination/Pagination';
 const Actors = () => {
   const [page, setPage] = useState(1);
   const navigation = useNavigate();
-  const { id: actorId } = useParams();
+  const { id: actorId = '' } = useParams();
   const { data, isFetching } = useGetActorInfoQuery(actorId);
 
   const moviesByActorResponse = useGetMoviesByActorQuery({

@@ -58,7 +58,7 @@ const MovieInfo = () => {
   const { user } = useSelector((state: RootState) => state.userAuthentication);
 
   const dispatch = useDispatch();
-  const { id: movieId } = useParams();
+  const { id: movieId = '' } = useParams();
 
   const { data, isFetching, isError } = useGetMovieInfoQuery(movieId);
 
@@ -72,14 +72,14 @@ const MovieInfo = () => {
     useGetUserMovieListQuery({
       listName: 'favorite/movies',
       accountId: user.id,
-      sessionId: localStorage.getItem('session_id'),
+      sessionId: localStorage.getItem('session_id') ?? '',
     });
 
   const { data: watchListData, refetch: refetchWatchList } =
     useGetUserMovieListQuery({
       listName: 'watchlist/movies',
       accountId: user.id,
-      sessionId: localStorage.getItem('session_id'),
+      sessionId: localStorage.getItem('session_id') ?? '',
     });
 
   const checkMovieId = useCallback(

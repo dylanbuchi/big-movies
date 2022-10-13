@@ -13,14 +13,14 @@ const Profile = () => {
   const favoritesResponse = useGetUserMovieListQuery({
     listName: 'favorite/movies',
     accountId: user.id,
-    sessionId: localStorage.getItem('session_id'),
+    sessionId: localStorage.getItem('session_id') ?? '',
     page: 1,
   });
 
   const watchListResponse = useGetUserMovieListQuery({
     listName: 'watchlist/movies',
     accountId: user.id,
-    sessionId: localStorage.getItem('session_id'),
+    sessionId: localStorage.getItem('session_id') ?? '',
     page: 1,
   });
 
