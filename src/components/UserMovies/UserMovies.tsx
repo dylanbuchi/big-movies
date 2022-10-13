@@ -1,7 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import { Movie } from '..';
+import { MoviesData } from '../../interfaces/movies';
 
-const UserMovies = ({ title, data }) => (
+interface UserMoviesProps {
+  title: string;
+  moviesData?: MoviesData;
+}
+const UserMovies = ({ title, moviesData }: UserMoviesProps) => (
   <Box>
     <Typography
       sx={(theme) => ({
@@ -29,7 +34,7 @@ const UserMovies = ({ title, data }) => (
           },
         })}
       >
-        {data?.results.map((movie, index) => (
+        {moviesData?.results.map((movie, index) => (
           <Movie key={movie.id} movie={movie} index={index} margin="10px" />
         ))}
       </Box>
