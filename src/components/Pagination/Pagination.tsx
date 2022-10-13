@@ -1,16 +1,18 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
-import { useClearSearchInput } from '../../utilities/hooks';
 
-const Pagination = ({ page, totalPages, setPage }) => {
-  const clearSearchInput = useClearSearchInput();
+interface PaginationProps {
+  page: number;
+  totalPages: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Pagination = ({ page, totalPages, setPage }: PaginationProps) => {
   const nextPage = () => {
-    clearSearchInput();
-    setPage((prevPage) => prevPage + 1);
+    setPage((prevPage: number) => prevPage + 1);
   };
   const previousPage = () => {
-    clearSearchInput();
-    setPage((prevPage) => prevPage - 1);
+    setPage((prevPage: number) => prevPage - 1);
   };
 
   if (!totalPages) return null;
