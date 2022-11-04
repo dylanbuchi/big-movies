@@ -1,6 +1,6 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Box, Button, Grid, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ActorInfo } from '../../interfaces/actors';
 import {
@@ -13,9 +13,18 @@ import Pagination from '../Pagination/Pagination';
 
 const Actors = () => {
   const [page, setPage] = useState(1);
+  const [actorAge, setActorAge] = useState(0);
+
   const navigation = useNavigate();
   const { id: actorId = '' } = useParams();
   const { data, isFetching } = useGetActorInfoQuery(actorId);
+
+  useEffect(() => {
+    const actorBirthYear = Number(data?.birthday?.split('-')[0]);
+    const currentYear = new Date().getFullYear();
+
+    setActorAge(currentYear - actorBirthYear);
+  }, [data?.birthday, actorAge]);
 
   const moviesByActorResponse = useGetMoviesByActorQuery({
     actorId,
@@ -83,6 +92,16 @@ const Actors = () => {
             Born: {actorInfo.birthday}
           </Typography>
           <Typography
+            mt={'-0.8rem'}
+            sx={(theme) => ({
+              [theme.breakpoints.down('md')]: { textAlign: 'center' },
+            })}
+            variant="subtitle2"
+            gutterBottom
+          >
+            {(actorAge && <>(age {[actorAge, 'years'].join(' ')})</>) || null}
+          </Typography>
+          <Typography
             variant="body1"
             gutterBottom
             align="justify"
@@ -97,9 +116,7 @@ const Actors = () => {
               },
             })}
           >
-            {actorInfo.biography
-              ? actorInfo.biography
-              : 'Sorry, there is no biography for this actor yet.'}
+            {actorInfo.biography ? actorInfo.biography : null}
           </Typography>
           <Box
             justifyContent="space-between"
