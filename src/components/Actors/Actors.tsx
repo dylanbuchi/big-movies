@@ -37,34 +37,36 @@ const Actors = () => {
 
   return (
     <Box>
-      <Grid container spacing={3}>
-        <Grid item xl={4} lg={5} sx={{ justifyContent: 'center' }}>
+      <Grid container>
+        <Grid
+          item
+          xl={4}
+          lg={5}
+          md={5}
+          mb={2}
+          sx={(theme) => ({
+            [theme.breakpoints.down('md')]: {
+              display: 'flex',
+              justifyContent: 'center',
+            },
+          })}
+        >
           <img
             src={`https://image.tmdb.org/t/p/w780${actorInfo.profileImagePath}`}
             alt={actorInfo.name}
             style={{
-              maxWidth: '70%',
-              minWidth: '20%',
+              width: '75%',
+
               borderRadius: '25px',
               objectFit: 'cover',
               boxShadow: '0.25em 0.25em 0.5em grey',
-              marginLeft: '50px',
             }}
           />
         </Grid>
-        <Grid
-          item
-          xl={8}
-          lg={7}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-          }}
-        >
+        <Grid item xl={8} md={7} p={1}>
           <Typography
             sx={(theme) => ({
-              [theme.breakpoints.down('md')]: { ml: '20px' },
+              [theme.breakpoints.down('md')]: { textAlign: 'center' },
             })}
             variant="h3"
             gutterBottom
@@ -73,7 +75,7 @@ const Actors = () => {
           </Typography>
           <Typography
             sx={(theme) => ({
-              [theme.breakpoints.down('md')]: { ml: '20px' },
+              [theme.breakpoints.down('md')]: { textAlign: 'center' },
             })}
             variant="h5"
             gutterBottom
@@ -99,7 +101,12 @@ const Actors = () => {
               ? actorInfo.biography
               : 'Sorry, there is no biography for this actor yet.'}
           </Typography>
-          <Box justifyContent="space-between" display="flex" marginTop="2rem">
+          <Box
+            justifyContent="space-between"
+            display="flex"
+            marginTop="2rem"
+            mr="0.64rem"
+          >
             <Button
               href={actorInfo.imdbPage}
               target="_blank"
