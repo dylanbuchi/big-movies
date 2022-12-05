@@ -1,6 +1,6 @@
 # Big Movies
 
-This movies web app allows users to browse, search, and watch movie trailers, as well as read actors' bios. It provides features such as search by genres and categories, register and log in to access the user's watchlist and favorite movies.
+This movies web app allows users to register, log in, browse, search, watch trailers, add movies to watchlists and favorites, as well as read actors' bios.
 
 ## Built with
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
